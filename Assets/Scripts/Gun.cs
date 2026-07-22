@@ -1,0 +1,154 @@
+using System.Collections;
+using TMPro;
+using UnityEngine;
+
+public class Gun
+{
+    //External Vars
+    private MonoBehaviour _mb;
+    private Camera _camera;
+    private Transform _attackPoint;
+    private TextMeshProUGUI _text;
+    private LayerMask _layerMask;
+    private float _damage;
+    private float _timeBetweenShooting;
+    private float _spread;
+    private float _range;
+    private float _reloadTime;
+    private float _timeBetweenShots;
+    private int _magazineSize;
+    private int _bulletsPerTap;
+    private bool _usesCamera;
+
+    //Internal Vars
+    private RaycastHit _raycastHit;
+    private int _bulletsLeft;
+    private int _bulletsShot;
+    private bool _readyToShoot;
+    private bool _reloading;
+
+    public Gun(MonoBehaviour monobehaviour, Camera camera, Transform attackPoint, TextMeshProUGUI text, LayerMask layerMask, float damage, float timeBetweenShooting, float spread, float range, float reloadTime, float timeBetweenShots, int magazineSize, int bulletsPerTap, bool usesCamera)
+    {
+        _mb = monobehaviour;
+        _camera = camera;
+        _attackPoint = attackPoint;
+        _text = text;
+        _layerMask = layerMask;
+        _damage = damage;
+        _timeBetweenShooting = timeBetweenShooting;
+        _spread = spread;
+        _range = range;
+        _reloadTime = reloadTime;
+        _timeBetweenShots = timeBetweenShots;
+        _magazineSize = magazineSize;
+        _bulletsPerTap = bulletsPerTap;
+        _usesCamera = usesCamera;
+    }
+
+    public void GunStart()
+    {
+        _bulletsLeft = _magazineSize;
+        _readyToShoot = true;
+    }
+
+    public void CanReload()
+    {
+        if (_bulletsLeft < _magazineSize && !_reloading)
+        {
+            Reload();
+        }
+    }
+
+    public void Reload()
+    {
+        _reloading = true;
+        _mb.StartCoroutine(ReloadOrShootFinished(_reloadTime, true));
+    }
+
+    public void CanShoot()
+    {
+        if(_readyToShoot && !_reloading && _bulletsLeft > 0)
+        {
+            _bulletsShot = _bulletsPerTap;
+            Shoot();
+        }
+    }
+
+    private void Shoot()
+    {
+        _readyToShoot = false;
+
+        if(_usesCamera)
+        {
+            ShootLogic(_camera.transform);
+        }
+        else
+        {
+            ShootLogic(_attackPoint.transform);
+        }
+
+        _bulletsLeft--;
+        _bulletsShot--;
+        _mb.StartCoroutine(ReloadOrShootFinished(_timeBetweenShooting, false));
+
+        if(_bulletsShot > 0 && _bulletsLeft > 0)
+        {
+            _mb.StartCoroutine(MultiShoot());
+        }
+    }
+
+    private void ShootLogic(Transform transform)
+    {
+        float xAxis = Random.Range(-_spread, _spread);
+        float yAxis = Random.Range(-_spread, _spread);
+        Vector3 direction = transform.forward + new Vector3(xAxis, yAxis, 0);
+
+        if (Physics.Raycast(transform.position, direction, out _raycastHit, _range, _layerMask))
+        {
+            _raycastHit.collider.gameObject.TryGetComponent(out Entity entity);
+            Debug.Log(_raycastHit.collider.gameObject.name);
+
+            if (entity != null)
+            {
+                entity.TakeDamage(_damage);
+            }
+        }
+    }
+
+    private IEnumerator ReloadOrShootFinished(float cooldown, bool afterReload)
+    {
+        yield return new WaitForSeconds(cooldown);
+
+        if(afterReload)
+        {
+            _bulletsLeft = _magazineSize;
+            _reloading = false;
+        }
+        else
+        {
+            _readyToShoot = true;
+        }
+    }
+
+    private IEnumerator MultiShoot()
+    {
+        yield return new WaitForSeconds(_timeBetweenShots);
+        Shoot();
+    }
+
+    public void SetText()
+    {
+        if(_usesCamera)
+        {
+            _text.SetText(_bulletsLeft + " / " + _magazineSize);
+        }
+    }
+
+    public void OutOfBullets()
+    {
+        if(_bulletsLeft <= 0 && !_reloading)
+        {
+            Reload();
+        }
+    }
+}
