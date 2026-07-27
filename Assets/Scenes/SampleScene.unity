@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -18383,6 +18383,61 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1215403434}
   m_Mesh: {fileID: 443052865284782323, guid: 5d1b53558647c114ab59b46979c79335, type: 3}
+--- !u!1 &1218604159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1218604161}
+  - component: {fileID: 1218604160}
+  m_Layer: 0
+  m_Name: GestorBatalla
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1218604160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218604159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52747145b96ce4042bf8cfdca55629a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabsLideresRebeldes:
+  - {fileID: 519665152991552934, guid: 131bd19a084d47f4dac59b0e6f3f08a4, type: 3}
+  prefabsPerseguidoresRebeldes:
+  - {fileID: 519665152991552934, guid: c0808c77929aecb4e8cc62042966abc0, type: 3}
+  prefabsLideresImperio:
+  - {fileID: 2842547459965897892, guid: b0f8d9ca68e11594c958c99265500969, type: 3}
+  prefabsPerseguidoresImperio:
+  - {fileID: 2842547459965897892, guid: 336e7bbd48c21824480a4913b9694d5b, type: 3}
+  cantidadPorPool: 10
+  radioDeSpawn: 100
+  tiempoEntreSpawns: 1.5
+--- !u!4 &1218604161
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218604159}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -23.659, y: 25.02, z: 222.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1222679016
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31730,3 +31785,4 @@ SceneRoots:
   - {fileID: 1053605272}
   - {fileID: 183616005}
   - {fileID: 967183928}
+  - {fileID: 1218604161}
