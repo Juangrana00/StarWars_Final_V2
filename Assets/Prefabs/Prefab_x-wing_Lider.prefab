@@ -161,11 +161,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a03f06f9061948b49ba0d65faf6034d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadMin: 35
-  velocidadMax: 50
-  giroMin: 2
-  giroMax: 4
-  tiempoDeVida: 12
+  velocidadMin: 85
+  velocidadMax: 120
+  giroMin: 3
+  giroMax: 5
+  tiempoDeVida: 30
+  centroEscenario: {fileID: 0}
+  limiteDistancia: 100
 --- !u!65 &4584487446393965114
 BoxCollider:
   m_ObjectHideFlags: 0

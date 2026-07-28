@@ -161,20 +161,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4c1907f28ad54458e2042bd0c3893c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadMin: 45
-  velocidadMax: 60
-  giroMin: 2
+  velocidadMin: 80
+  velocidadMax: 100
+  giroMin: 3
   giroMax: 5
-  tiempoDeVida: 12
-  prefabLaser: {fileID: 3219464102156399209, guid: f3552007ae4162542959d23d63b8e2eb,
+  tiempoDeVida: 30
+  prefabLaser: {fileID: 896608181891966687, guid: 8ad3e4d2a6c9af444be8ea91f67f8e5f,
     type: 3}
   puntosDeDisparo:
   - {fileID: 274934308201243057}
   - {fileID: 1782328310768203721}
   - {fileID: 301622529648831766}
   - {fileID: 7354153586276125454}
-  cadenciaMin: 0.3
-  cadenciaMax: 0.8
+  cadenciaMin: 2
+  cadenciaMax: 6
   objetivoLider: {fileID: 0}
 --- !u!65 &3140899188369195737
 BoxCollider:

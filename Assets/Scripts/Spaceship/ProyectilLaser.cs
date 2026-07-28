@@ -2,34 +2,38 @@ using UnityEngine;
 
 public class ProyectilLaser : MonoBehaviour
 {
-    public float velocidad = 150f;
-    public float tiempoDeVida = 2f;
+    [Header("Configuración de Vuelo")]
+    public float velocidad = 200f;
+    public float tiempoDeVida = 3f;
 
-    void Start()
+    [Header("Efectos Visuales")]
+    [Tooltip("Arrastrá acá tu prefab VFX_Explosion_Laser")]
+    public GameObject prefabExplosion;
+
+    private void Start()
     {
-        // El láser se destruye si no choca con nada en 2 segundos
+        // En vez de apagarlo, lo DESTRUIMOS a los 3 segundos para limpiar la RAM
         Destroy(gameObject, tiempoDeVida);
     }
 
-    void Update()
+    private void Update()
     {
-        // Movimiento del láser
         transform.Translate(Vector3.forward * velocidad * Time.deltaTime);
     }
 
-    // Esta función se ejecuta automáticamente cuando el Trigger del láser toca otro Collider
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        // Verificamos si el objeto con el que chocamos tiene la etiqueta "Nave"
         if (other.CompareTag("Nave"))
         {
-            // Desactivamos la nave objetivo (aprovechando tu sistema de Object Pooling)
+            if (prefabExplosion != null)
+            {
+                Instantiate(prefabExplosion, transform.position, transform.rotation);
+            }
+
+            // Desactivamos la nave enemiga para que vuelva a su Pool
             other.gameObject.SetActive(false);
 
-            // Opcional: Acá a futuro podés instanciar un prefab de partículas de explosión
-            // Instantiate(prefabExplosion, transform.position, transform.rotation);
-
-            // Destruimos el láser que acaba de impactar
+            // Destruimos este láser inmediatamente al chocar
             Destroy(gameObject);
         }
     }

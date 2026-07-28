@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2822469630286581195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4259938753419366505}
+  - component: {fileID: 1058927797646460678}
+  m_Layer: 0
+  m_Name: Gestor Batallas Caza
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4259938753419366505
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2822469630286581195}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -23.659, y: 25.02, z: 222.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1058927797646460678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2822469630286581195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52747145b96ce4042bf8cfdca55629a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabsLideresRebeldes:
+  - {fileID: 519665152991552934, guid: 131bd19a084d47f4dac59b0e6f3f08a4, type: 3}
+  prefabsPerseguidoresRebeldes:
+  - {fileID: 519665152991552934, guid: c0808c77929aecb4e8cc62042966abc0, type: 3}
+  prefabsLideresImperio:
+  - {fileID: 3126625013880461662, guid: 14a027c91cf952447bd7587d792ebed0, type: 3}
+  prefabsPerseguidoresImperio:
+  - {fileID: 3126625013880461662, guid: f080de1062c044840ab4416672613e52, type: 3}
+  cantidadPorPool: 10
+  radioDeSpawn: 0
+  tiempoEntreSpawns: 1.5
