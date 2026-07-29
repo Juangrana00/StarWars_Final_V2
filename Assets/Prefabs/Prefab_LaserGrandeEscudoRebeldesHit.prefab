@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 8218483459409756248}
   - component: {fileID: 2101978640377326883}
   - component: {fileID: -5331008438047588549}
-  - component: {fileID: -2533156196942055451}
+  - component: {fileID: 2051746625169996363}
   m_Layer: 0
-  m_Name: Prefab_LaserImperio
+  m_Name: Prefab_LaserGrandeEscudoRebeldesHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 17.988396, y: 13.299973, z: -12.289273}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 0.08, y: 0.08, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c571126e918e6034b9db38c1efca891d, type: 2}
+  - {fileID: 2100000, guid: 0e473ae62eb3254408cee57875c39595, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,10 +105,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
+  m_Radius: 122.91291
+  m_Height: 307.2823
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 3.944292}
 --- !u!54 &-5331008438047588549
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -132,11 +132,11 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
---- !u!114 &-2533156196942055451
+--- !u!114 &2051746625169996363
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,10 +145,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 896608181891966687}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05184821b6e23f54d96d82f384fb2ad7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d9656719ffb9594d9150588dbe6c389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidad: 600
-  tiempoDeVida: 6
-  prefabExplosion: {fileID: 8463825117915263979, guid: 6a6454e697ba0524484e8d7688ecc591,
-    type: 3}
+  velocidadAvance: 750
+  tiempoDeVida: 50
+  particulasImpacto:
+  - {fileID: 8463825117915263979, guid: 6a6454e697ba0524484e8d7688ecc591, type: 3}
+  - {fileID: 8463825117915263979, guid: 9e3e412ca22b0db42bb33b689a49e6ef, type: 3}
