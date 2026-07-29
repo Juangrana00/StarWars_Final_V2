@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3808685410230669671}
   - component: {fileID: 1347392599697192366}
   m_Layer: 0
-  m_Name: Humo
+  m_Name: HumoFuerte
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
