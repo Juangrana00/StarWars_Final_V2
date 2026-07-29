@@ -151,5 +151,4 @@ MonoBehaviour:
   velocidadAvance: 750
   tiempoDeVida: 50
   particulasImpacto:
-  - {fileID: 8463825117915263979, guid: 6a6454e697ba0524484e8d7688ecc591, type: 3}
   - {fileID: 8463825117915263979, guid: 9e3e412ca22b0db42bb33b689a49e6ef, type: 3}

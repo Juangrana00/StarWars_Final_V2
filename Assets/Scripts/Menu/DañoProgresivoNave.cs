@@ -3,41 +3,40 @@ using UnityEngine;
 public class DañoProgresivoNave : MonoBehaviour
 {
     [Header("Configuración de Daño")]
-    [Tooltip("Cada cuántos impactos se prende un incendio nuevo")]
-    public int impactosParaPrenderFuego = 3; 
-    
-    private int impactosAcumulados = 0;
-    private int indiceFuegoActual = 0;
+    [Tooltip("Cada cuántos impactos se prende el siguiente efecto")]
+    public int impactosParaEfecto = 3;
 
-    [Header("Fuegos Acomodados a Mano")]
-    public GameObject[] focosDeFuego; // Acá arrastrás los objetos que ya tenés en la escena
+    private int impactosAcumulados = 0;
+    private int indiceDañoActual = 0;
+
+    [Header("Efectos Secuenciales (Ordenados)")]
+    [Tooltip("Poné los Prefabs de HUMO al principio, y los de FUEGO al final")]
+    public GameObject[] focosDeDaño;
 
     void Start()
     {
-        // Al darle Play, el código se asegura de apagarlos todos por vos
-        foreach (GameObject fuego in focosDeFuego)
+        // Al darle Play, nos aseguramos de apagarlos todos
+        foreach (GameObject foco in focosDeDaño)
         {
-            if (fuego != null) fuego.SetActive(false);
+            if (foco != null) foco.SetActive(false);
         }
     }
 
-    // Le sacamos el (Vector3) porque ya no nos importa dónde pegó exactamente
     public void RecibirImpacto()
     {
         impactosAcumulados++;
 
-        // Si llegó a la cantidad de golpes necesarios y todavía quedan fuegos apagados
-        if (impactosAcumulados >= impactosParaPrenderFuego && indiceFuegoActual < focosDeFuego.Length)
+        // Si llegó a la cantidad de golpes y quedan efectos por prender...
+        if (impactosAcumulados >= impactosParaEfecto && indiceDañoActual < focosDeDaño.Length)
         {
-            // Prende el fuego que toca
-            if (focosDeFuego[indiceFuegoActual] != null)
+            if (focosDeDaño[indiceDañoActual] != null)
             {
-                focosDeFuego[indiceFuegoActual].SetActive(true);
+                focosDeDaño[indiceDañoActual].SetActive(true);
             }
-            
-            // Avanza al siguiente fuego de la lista y reinicia la cuenta
-            indiceFuegoActual++;
-            impactosAcumulados = 0; 
+
+            // Avanza al siguiente y reinicia la cuenta de impactos
+            indiceDañoActual++;
+            impactosAcumulados = 0;
         }
     }
 }
