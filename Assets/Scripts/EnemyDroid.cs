@@ -11,7 +11,7 @@ public class EnemyDroid : EnemyGun, IParent
     [SerializeField] List<Transform> _waypoints = new();
     [SerializeField] List<Transform> _attackPoints = new();
     private Vector3 _destiny;
-    private Coroutine _boolCoroutine, _patrolCoroutine, _rotCoroutine;
+    private Coroutine _boolCoroutine, _patrolCoroutine, _rotCoroutine, _fovRotCoroutine;
     private Transform _target;
     private bool _canPatrol = false, _isDead = false;
 
@@ -20,6 +20,7 @@ public class EnemyDroid : EnemyGun, IParent
         onView += TargetDetected;
         outOfView += TargetWasDetected;
         fov.ActionsToDo(onView, outOfView);
+        ConstructGun();
     }
 
     public override void ActivateEnemy(Transform position)
@@ -289,11 +290,19 @@ public class EnemyDroid : EnemyGun, IParent
     {
         StopChase();
         ActivateCoroutine(ref updateCoroutine, myUpdate(), false);
+        ActivateCoroutine(ref _fovRotCoroutine, fov.Test(), true);
     }
 
     private void TargetWasDetected()
     {
         ActivateCoroutine(ref updateCoroutine, myUpdate(), true);
+    }
+
+    private IEnumerator GoBackToNormal(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        ActivateCoroutine(ref _fovRotCoroutine, fov.Test(), false);
+
     }
 
     private void OnDrawGizmos()

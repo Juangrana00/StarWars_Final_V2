@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.UI.Image;
 
 public class FOV : MonoBehaviour
 {
@@ -16,8 +15,8 @@ public class FOV : MonoBehaviour
     public int segments = 25;
     private Action _onView, _outOfView;
     private Coroutine _searchCoroutine, _waitCoroutine;
-    private Transform _targetTransform;
     private bool _isVisible = false, _wasVisible = false;
+    private Transform _targetTransform;
 
     public void StartSearch()
     {
@@ -61,7 +60,8 @@ public class FOV : MonoBehaviour
                 {
                     visibleTargets.Add(target);
                     _isVisible = true;
-                    Debug.Log("TARGET DETECTED");
+                    _targetTransform = target;
+                    Debug.Log("TARGET DETECTED"); //TRES LÍNEAS ORIGINALES
                 }
             }
         }
@@ -132,5 +132,16 @@ public class FOV : MonoBehaviour
     {
         _onView = onView;
         _outOfView = outOfView;
+    }
+
+    public IEnumerator Test()
+    {
+        while(true)
+        {
+            yield return null;
+            Vector3 dir = (_targetTransform.position - transform.position).normalized;
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 5);
+        }
     }
 }

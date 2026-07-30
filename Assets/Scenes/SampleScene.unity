@@ -11846,7 +11846,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &992445971
 Transform:
   m_ObjectHideFlags: 0
@@ -18193,7 +18193,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1188958978
 Transform:
   m_ObjectHideFlags: 0
@@ -26435,8 +26435,6 @@ GameObject:
   - component: {fileID: 1558871380}
   - component: {fileID: 1558871382}
   - component: {fileID: 1558871379}
-  - component: {fileID: 1558871384}
-  - component: {fileID: 1558871385}
   - component: {fileID: 1558871383}
   m_Layer: 6
   m_Name: Player
@@ -26575,56 +26573,6 @@ MonoBehaviour:
   magazineSize: 30
   bulletsPerTap: 1
   allowButtonHold: 1
---- !u!114 &1558871384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558871378}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b16ea364f4eb5b147b825cd3548b3bb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpeed: 4
-  sprintSpeed: 6.5
-  orientation: {fileID: 1038315418}
-  playerHeight: 2
-  groundDrag: 5
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  jumpForce: 6
-  jumpCooldown: 0.25
-  airMultiplier: 0.04
-  crouchSpeed: 1.5
-  crouchYScale: 0.5
-  maxSlopeAngle: 40
-  jumpKey: 32
-  sprintKey: 304
-  crouchKey: 99
-  interactorSource: {fileID: 330585546}
-  interactRange: 7
-  state: 0
---- !u!114 &1558871385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558871378}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 308ccf288330db4489fb94ee34bf5a5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  orientation: {fileID: 1038315418}
-  playerObj: {fileID: 1633348847}
-  maxSlideTime: 0.75
-  slideForce: 200
-  slideYScale: 0.5
-  slideKey: 306
 --- !u!1001 &1573283902
 PrefabInstance:
   m_ObjectHideFlags: 0
