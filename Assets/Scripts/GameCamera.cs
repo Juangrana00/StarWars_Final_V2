@@ -14,6 +14,10 @@ public class GameCamera : MonoBehaviour, IDamageable
     [SerializeField] List<Animator> _doorAnimators = new List<Animator>();
     [SerializeField] List<Enemy> _enemiesHidden = new List<Enemy>();
 
+    [Header("VFX")]
+    // CAMBIO 1: Convertimos el prefab único en un array (lista) usando []
+    [SerializeField] GameObject[] _explosionPrefabs;
+
     //Private vars
     Action onView, outOfView;
     Coroutine _delayCoroutine = null, _trackCoroutine = null;
@@ -22,6 +26,7 @@ public class GameCamera : MonoBehaviour, IDamageable
     bool _parameterValue = false, _firstTime = true;
     int _savedStateHash;
     float _savedNormalizedTime, _life;
+    bool _isDead = false; // El candado para evitar instanciar infinitas explosiones
 
     private void Start()
     {
@@ -41,7 +46,7 @@ public class GameCamera : MonoBehaviour, IDamageable
         _animator.enabled = false;
         _parameterValue = !_parameterValue;
 
-        if(_trackCoroutine == null)
+        if (_trackCoroutine == null)
         {
             _trackCoroutine = StartCoroutine(TrackingTarget());
         }
@@ -81,7 +86,7 @@ public class GameCamera : MonoBehaviour, IDamageable
 
     private void WasDetected()
     {
-        if(_trackCoroutine != null)
+        if (_trackCoroutine != null)
         {
             StopCoroutine(_trackCoroutine);
             _trackCoroutine = null;
@@ -110,7 +115,7 @@ public class GameCamera : MonoBehaviour, IDamageable
 
     private IEnumerator TrackingTarget()
     {
-        while(true)
+        while (true)
         {
             Transform target = _fov.ReturnTarget();
 
@@ -126,11 +131,31 @@ public class GameCamera : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage)
     {
+        // Si la cámara ya está destruida, ignoramos el daño extra
+        if (_isDead) return;
+
         _life -= damage;
         Debug.Log("CAMERA LIFE: " + _life);
 
-        if(_life <= 0)
+        if (_life <= 0)
         {
+            _isDead = true; // Activamos el candado
+
+            // CAMBIO 2: Elegimos e instanciamos un VFX al azar de la lista
+            if (_explosionPrefabs != null && _explosionPrefabs.Length > 0)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, _explosionPrefabs.Length);
+                GameObject selectedVFX = _explosionPrefabs[randomIndex];
+
+                if (selectedVFX != null)
+                {
+                    GameObject vfx = Instantiate(selectedVFX, transform.position, transform.rotation);
+
+                    // Destruimos el VFX instanciado después de 2 segundos para no acumular basura
+                    Destroy(vfx, 2f);
+                }
+            }
+
             Destroy(_parent);
         }
     }

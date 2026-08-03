@@ -1465,6 +1465,10 @@ MonoBehaviour:
   _maxLife: 4
   _doorAnimators: []
   _enemiesHidden: []
+  _explosionPrefabs:
+  - {fileID: 7181851561162014772, guid: 1afacd5df90bf244c93b296212e2d7d1, type: 3}
+  - {fileID: 7181851561162014772, guid: 01e0769e2722e494ca5cfcee20da6525, type: 3}
+  - {fileID: 7427626633215168913, guid: feaa90a3d6da85e47ba89597a704eab8, type: 3}
 --- !u!114 &7885738030374749763
 MonoBehaviour:
   m_ObjectHideFlags: 0

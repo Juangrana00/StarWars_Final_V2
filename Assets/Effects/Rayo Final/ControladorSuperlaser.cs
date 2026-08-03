@@ -1,41 +1,47 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ControladorSuperlaser : MonoBehaviour
 {
     [Header("Interacción y Cinemática")]
     public GameObject camaraJugador;
     public GameObject camaraInterna;
-    public GameObject camaraExterna1; 
-    public GameObject camaraExterna2; 
-    
+    public GameObject camaraExterna1;
+    public GameObject camaraExterna2;
+
     private bool jugadorEnPanel = false;
     private bool secuenciaActiva = false;
 
     [Header("Tiempos de Pausa (Suspenso)")]
-    [Tooltip("Segundos extra viendo el tubo interno antes de salir afuera")]
-    public float pausaFinInterna = 1.0f; 
-    [Tooltip("Segundos extra viendo los 6 rayos unidos antes del corte de cámara")]
-    public float pausaFinConvergencia = 0.5f; 
-    [Tooltip("Segundos en la cámara 2 antes de que salga el rayo principal")]
-    public float pausaAntesDeDisparar = 0.5f; 
+    public float pausaFinInterna = 1.0f;
+    public float pausaFinConvergencia = 0.5f;
+    public float pausaAntesDeDisparar = 0.5f;
 
     [Header("Referencias Internas")]
     public AceleradorDeDisparo aceleradorInterno;
 
     [Header("Fase 1: Rayos Tributarios")]
-    public LineRenderer[] rayosTributarios; 
-    public Transform puntoDeConvergencia;   
-    public float tiempoCrecimiento = 0.8f;  
+    public LineRenderer[] rayosTributarios;
+    public Transform puntoDeConvergencia;
+    public float tiempoCrecimiento = 0.8f;
 
     [Header("Fase 2: Rayo Principal")]
     public LineRenderer rayoPrincipal;
     public Transform naveObjetivo;
-    public float tiempoCargaNucleo = 0.5f; 
+    public float tiempoCargaNucleo = 0.5f;
     public float velocidadDisparoPrincipal = 0.2f;
 
     [Header("Efectos Finales")]
-    public ParticleSystem explosionNave; 
+    [Tooltip("Arrastrá acá los Particle Systems de las explosiones que ya acomodaste en el crucero")]
+    public ParticleSystem[] explosionesNave;
+    [Tooltip("Creá GameObjects vacíos distribuidos en tu crucero y arrastralos acá para definir dónde explota")]
+    public Transform[] puntosDeExplosion;
+    [Tooltip("Tiempo de retraso entre cada explosión para generar un efecto en cadena")]
+    public float retrasoEntreExplosiones = 0.15f;
+
+    [Header("Fin del Juego")]
+    public string nombreEscenaMenu = "MainMenu";
 
     void Start()
     {
@@ -64,28 +70,23 @@ public class ControladorSuperlaser : MonoBehaviour
     {
         secuenciaActiva = true;
 
-        // 1. CORTAMOS A CÁMARA INTERNA
         camaraJugador.SetActive(false);
         camaraInterna.SetActive(true);
 
-        // 2. DISPARAMOS EL ACELERADOR INTERNO
         aceleradorInterno.IniciarSecuenciaTubo();
-        
-        // Esperamos que termine de cargar (2.65s) + tu tiempo de pausa personalizado
-        yield return new WaitForSeconds(2.65f + pausaFinInterna); 
 
-        // 3. CORTAMOS A CÁMARA EXTERNA 1
+        yield return new WaitForSeconds(2.65f + pausaFinInterna);
+
         camaraInterna.SetActive(false);
         camaraExterna1.SetActive(true);
 
-        // 4. LOS 6 RAYOS CONVERGEN
         float tiempoPasado = 0f;
         foreach (LineRenderer rayo in rayosTributarios)
         {
-            rayo.useWorldSpace = true; 
-            rayo.positionCount = 2; 
-            rayo.SetPosition(0, rayo.transform.position); 
-            rayo.SetPosition(1, rayo.transform.position); 
+            rayo.useWorldSpace = true;
+            rayo.positionCount = 2;
+            rayo.SetPosition(0, rayo.transform.position);
+            rayo.SetPosition(1, rayo.transform.position);
         }
 
         while (tiempoPasado < tiempoCrecimiento)
@@ -105,20 +106,14 @@ public class ControladorSuperlaser : MonoBehaviour
             rayo.SetPosition(1, puntoDeConvergencia.position);
         }
 
-        // 5. CARGA DEL NÚCLEO EXTERIOR Y PAUSA DRAMÁTICA
         yield return new WaitForSeconds(tiempoCargaNucleo);
-        
-        // Agregamos una pausa extra acá para apreciar los 6 rayos antes del corte
         yield return new WaitForSeconds(pausaFinConvergencia);
 
-        // 6. CORTAMOS A CÁMARA EXTERNA 2
         camaraExterna1.SetActive(false);
         camaraExterna2.SetActive(true);
 
-        // Pausa en el nuevo ángulo justo antes de que el rayo salga disparado
         yield return new WaitForSeconds(pausaAntesDeDisparar);
 
-        // 7. DISPARO FINAL A LA NAVE
         rayoPrincipal.useWorldSpace = true;
         rayoPrincipal.positionCount = 2;
         rayoPrincipal.SetPosition(0, puntoDeConvergencia.position);
@@ -135,22 +130,23 @@ public class ControladorSuperlaser : MonoBehaviour
         }
 
         rayoPrincipal.SetPosition(1, naveObjetivo.position);
-        
-        // 8. IMPACTO Y EXPLOSIÓN
-        if (explosionNave != null)
+
+        // 8. IMPACTO Y EXPLOSIONES SIMULTÁNEAS
+        if (explosionesNave.Length > 0)
         {
-            explosionNave.Play();
+            foreach (ParticleSystem explosion in explosionesNave)
+            {
+                if (explosion != null)
+                {
+                    explosion.Play();
+                }
+            }
         }
 
         // 9. TIEMPO PARA VER LA DESTRUCCIÓN
         yield return new WaitForSeconds(3f);
 
-        // 10. LIMPIEZA Y VUELTA AL JUGADOR
-        rayoPrincipal.positionCount = 0;
-        foreach (LineRenderer rayo in rayosTributarios) rayo.positionCount = 0;
-        
-        camaraExterna2.SetActive(false);
-        camaraJugador.SetActive(true);
-        secuenciaActiva = false;
+        // 10. LIMPIEZA Y VUELTA AL MENÚ PRINCIPAL
+        SceneManager.LoadScene(nombreEscenaMenu);
     }
 }

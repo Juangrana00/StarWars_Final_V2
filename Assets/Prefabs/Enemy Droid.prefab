@@ -713,7 +713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae8c0ca264f4fc41b7cdb4c379865d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLife: 12
+  maxLife: 10
   life: 0
   navAgent: {fileID: 8915017947312553906}
   playerLayer:
@@ -730,10 +730,10 @@ MonoBehaviour:
   fov: {fileID: 4630480144599264859}
   firePoint: {fileID: 8703900381968110509}
   gunDamage: 1
-  timeBetweenShooting: 0.05
+  timeBetweenShooting: 0.5
   spread: 0.02
   range: 100
-  reloadTime: 1
+  reloadTime: 1.5
   timeBetweenShots: 0
   magazineSize: 30
   bulletsPerTap: 1
