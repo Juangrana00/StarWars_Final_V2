@@ -737,6 +737,8 @@ MonoBehaviour:
   timeBetweenShots: 0
   magazineSize: 30
   bulletsPerTap: 1
+  _bulletPrefab: {fileID: 8271509199102463249, guid: ac2aba0181142064fbc8d64c0394cbbc,
+    type: 3}
   _animator: {fileID: 3378048706259930780}
   _lookName: isSearching
   _walkName: isWalking

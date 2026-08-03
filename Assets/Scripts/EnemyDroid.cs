@@ -5,22 +5,25 @@ using UnityEngine;
 public class EnemyDroid : EnemyGun, IParent
 {
     [Header("Enemy Vars")]
+    [SerializeField] GameObject _bulletPrefab;
     [SerializeField] Animator _animator;
     [SerializeField] string _lookName, _walkName, _attackName, _deathName, _detectName, _fireName;
     [SerializeField] float _patrolDelay, _minDistance, _timeAtPoint, _hitRange, _rotationSpeed;
     [SerializeField] List<Transform> _waypoints = new();
     [SerializeField] List<Transform> _attackPoints = new();
     private Vector3 _destiny;
-    private Coroutine _boolCoroutine, _patrolCoroutine, _rotCoroutine, _fovRotCoroutine;
+    private Coroutine _boolCoroutine, _patrolCoroutine, _rotCoroutine, _fovRotCoroutine, _noTargetCoroutine, _longAttackCoroutine;
     private Transform _target;
-    private bool _canPatrol = false, _isDead = false;
+    private bool _canPatrol = false, _isDead = false, _isFov = false;
+    private float _secondsToNormal = 6;
 
     private void Start()
     {
         onView += TargetDetected;
         outOfView += TargetWasDetected;
         fov.ActionsToDo(onView, outOfView);
-        ConstructGun();
+        ConstructGun(CalculateDirection(), _bulletPrefab);
+        gun.GunStart();
     }
 
     public override void ActivateEnemy(Transform position)
@@ -66,13 +69,15 @@ public class EnemyDroid : EnemyGun, IParent
         SightRadius();
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
 
-        if(!playerInSightRange && !playerInAttackRange)
+        if (_isFov) return;
+
+        if (!playerInSightRange && !playerInAttackRange)
         {
             PatrolLogic();
         }
-        else if(playerInSightRange && !playerInAttackRange)
+        else if (playerInSightRange && !playerInAttackRange)
         {
-            if(_rotCoroutine != null)
+            if (_rotCoroutine != null)
             {
                 return;
             }
@@ -81,7 +86,7 @@ public class EnemyDroid : EnemyGun, IParent
                 ActivateCoroutine(ref _rotCoroutine, LookAtTarget(), true);
             }
         }
-        else if(playerInSightRange && playerInAttackRange)
+        else if (playerInSightRange && playerInAttackRange)
         {
             CloseAttack();
         }
@@ -203,7 +208,6 @@ public class EnemyDroid : EnemyGun, IParent
 
     private void CloseAttack()
     {
-        Debug.Log("METHOD STARTED");
         StopChase();
         StopPatrol();
 
@@ -289,20 +293,56 @@ public class EnemyDroid : EnemyGun, IParent
     private void TargetDetected()
     {
         StopChase();
-        ActivateCoroutine(ref updateCoroutine, myUpdate(), false);
-        ActivateCoroutine(ref _fovRotCoroutine, fov.Test(), true);
+        StopPatrol();
+
+        if(!playerInAttackRange)
+        {
+            _isFov = true;
+            ActivateCoroutine(ref _fovRotCoroutine, fov.Test(), true);
+            ActivateCoroutine(ref _longAttackCoroutine, LongAttack(), true);
+        }
     }
 
     private void TargetWasDetected()
     {
-        ActivateCoroutine(ref updateCoroutine, myUpdate(), true);
+        ActivateCoroutine(ref _noTargetCoroutine, GoBackToNormal(_secondsToNormal), true);
     }
 
     private IEnumerator GoBackToNormal(float seconds)
     {
+        ActivateCoroutine(ref _longAttackCoroutine, LongAttack(), false);
+        var lastPos = fov.ReturnLastTarget();
+        Chase(lastPos.position);
         yield return new WaitForSeconds(seconds);
+        _isFov = false;
         ActivateCoroutine(ref _fovRotCoroutine, fov.Test(), false);
+    }
 
+    private Vector3 CalculateDirection()
+    {
+        var target = fov.ReturnTarget();
+
+        if(target != null)
+        {
+            var dir = (target.position - transform.position).normalized;
+            return dir;
+        }
+        else
+        {
+            var dir = transform.forward;
+            return dir;
+        }
+    }
+
+    private IEnumerator LongAttack()
+    {
+        while(true)
+        {
+            yield return null;
+            CalculateDirection();
+            gun.CanShoot();
+            gun.OutOfBullets();
+        }
     }
 
     private void OnDrawGizmos()

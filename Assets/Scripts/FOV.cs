@@ -15,8 +15,9 @@ public class FOV : MonoBehaviour
     public int segments = 25;
     private Action _onView, _outOfView;
     private Coroutine _searchCoroutine, _waitCoroutine;
+    private Transform _target;
     private bool _isVisible = false, _wasVisible = false;
-    private Transform _targetTransform;
+    private float _rotSpeed = 12;
 
     public void StartSearch()
     {
@@ -60,7 +61,6 @@ public class FOV : MonoBehaviour
                 {
                     visibleTargets.Add(target);
                     _isVisible = true;
-                    _targetTransform = target;
                     Debug.Log("TARGET DETECTED"); //TRES LÍNEAS ORIGINALES
                 }
             }
@@ -123,9 +123,15 @@ public class FOV : MonoBehaviour
     {
         if(visibleTargets.Count > 0)
         {
+            _target = visibleTargets[0];
             return visibleTargets[0];
         }
         else return null;
+    }
+
+    public Transform ReturnLastTarget()
+    {
+        return _target;
     }
 
     public void ActionsToDo(Action onView, Action outOfView)
@@ -139,9 +145,14 @@ public class FOV : MonoBehaviour
         while(true)
         {
             yield return null;
-            Vector3 dir = (_targetTransform.position - transform.position).normalized;
-            Quaternion targetRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 5);
+            Transform target = ReturnTarget();
+
+            if(target != null)
+            {
+                Vector3 dir = (target.position - transform.position).normalized;
+                Quaternion targetRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * _rotSpeed);
+            }
         }
     }
 }

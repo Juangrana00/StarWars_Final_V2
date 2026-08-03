@@ -9,9 +9,9 @@ public abstract class EnemyGun : Enemy
     public int magazineSize, bulletsPerTap;
     protected Gun gun;
 
-    public virtual void ConstructGun()
+    public virtual void ConstructGun(Vector3 direction, GameObject bulletPrefab)
     {
         TextMeshProUGUI text = new TextMeshProUGUI();
-        gun = new Gun(this, Camera.main, firePoint, text, playerLayer, gunDamage, timeBetweenShooting, spread, range, reloadTime, timeBetweenShots, magazineSize, bulletsPerTap, false);
+        gun = new Gun(this, Camera.main, firePoint, text, playerLayer, gunDamage, timeBetweenShooting, spread, range, reloadTime, timeBetweenShots, magazineSize, bulletsPerTap, false, direction, bulletPrefab);
     }
 }

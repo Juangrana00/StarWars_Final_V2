@@ -1420,6 +1420,7 @@ GameObject:
   - component: {fileID: 6287735609612723998}
   - component: {fileID: 2958956569947655627}
   - component: {fileID: 7885738030374749763}
+  - component: {fileID: 7144173645542711235}
   m_Layer: 0
   m_Name: FOV
   m_TagString: Untagged
@@ -1455,11 +1456,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3c78c6fa4a0b8448f902e4eff6b1c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _parent: {fileID: 6475978443542027299}
   _animator: {fileID: 1680598713510711947}
   _fov: {fileID: 7885738030374749763}
   _parameterName: isOpen
   _doorCooldown: 4
   _rotationSpeed: 4.5
+  _maxLife: 4
   _doorAnimators: []
   _enemiesHidden: []
 --- !u!114 &7885738030374749763
@@ -1488,6 +1491,27 @@ MonoBehaviour:
   viewRadius: 8
   viewAngle: 15
   segments: 10
+--- !u!135 &7144173645542711235
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739978983215098725}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7045308788278122448
 GameObject:
   m_ObjectHideFlags: 0

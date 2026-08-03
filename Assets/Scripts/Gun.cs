@@ -9,7 +9,9 @@ public class Gun
     private Camera _camera;
     private Transform _attackPoint;
     private TextMeshProUGUI _text;
+    private GameObject _laser;
     private LayerMask _layerMask;
+    private Vector3 _personalizedDirection;
     private float _damage;
     private float _timeBetweenShooting;
     private float _spread;
@@ -27,7 +29,7 @@ public class Gun
     private bool _readyToShoot;
     private bool _reloading;
 
-    public Gun(MonoBehaviour monobehaviour, Camera camera, Transform attackPoint, TextMeshProUGUI text, LayerMask layerMask, float damage, float timeBetweenShooting, float spread, float range, float reloadTime, float timeBetweenShots, int magazineSize, int bulletsPerTap, bool usesCamera)
+    public Gun(MonoBehaviour monobehaviour, Camera camera, Transform attackPoint, TextMeshProUGUI text, LayerMask layerMask, float damage, float timeBetweenShooting, float spread, float range, float reloadTime, float timeBetweenShots, int magazineSize, int bulletsPerTap, bool usesCamera, Vector3 direction, GameObject laser)
     {
         _mb = monobehaviour;
         _camera = camera;
@@ -43,6 +45,8 @@ public class Gun
         _magazineSize = magazineSize;
         _bulletsPerTap = bulletsPerTap;
         _usesCamera = usesCamera;
+        _personalizedDirection = direction;
+        _laser = laser;
     }
 
     public void GunStart()
@@ -80,11 +84,11 @@ public class Gun
 
         if(_usesCamera)
         {
-            ShootLogic(_camera.transform);
+            ShootLogic(_camera.transform, _camera.transform.forward);
         }
         else
         {
-            ShootLogic(_attackPoint.transform);
+            ShootLogic(_attackPoint.transform, _personalizedDirection);
         }
 
         _bulletsLeft--;
@@ -97,20 +101,30 @@ public class Gun
         }
     }
 
-    private void ShootLogic(Transform transform)
+    private void ShootLogic(Transform transform, Vector3 dir)
     {
         float xAxis = Random.Range(-_spread, _spread);
         float yAxis = Random.Range(-_spread, _spread);
-        Vector3 direction = transform.forward + new Vector3(xAxis, yAxis, 0);
+        Vector3 direction = dir + new Vector3(xAxis, yAxis, 0);
+
+        var laser = UnityEngine.Object.Instantiate(_laser, transform.position, Quaternion.Euler(90, 0, 0));
+        laser.TryGetComponent(out Rigidbody rb);
+        rb.velocity = direction * 50f;
 
         if (Physics.Raycast(transform.position, direction, out _raycastHit, _range, _layerMask))
         {
             _raycastHit.collider.gameObject.TryGetComponent(out Entity entity);
+            _raycastHit.collider.gameObject.TryGetComponent(out IDamageable damageable);
             Debug.Log(_raycastHit.collider.gameObject.name);
 
             if (entity != null)
             {
                 entity.TakeDamage(_damage);
+            }
+
+            if(damageable != null)
+            {
+                damageable.TakeDamage(_damage);
             }
         }
     }

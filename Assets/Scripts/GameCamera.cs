@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameCamera : MonoBehaviour
+public class GameCamera : MonoBehaviour, IDamageable
 {
     [Header("Camera Vars")]
+    [SerializeField] GameObject _parent;
     [SerializeField] Animator _animator;
     [SerializeField] FOV _fov;
     [SerializeField] string _parameterName;
-    [SerializeField] float _doorCooldown, _rotationSpeed;
+    [SerializeField] float _doorCooldown, _rotationSpeed, _maxLife = 4;
     [SerializeField] List<Animator> _doorAnimators = new List<Animator>();
     [SerializeField] List<Enemy> _enemiesHidden = new List<Enemy>();
 
@@ -20,7 +21,7 @@ public class GameCamera : MonoBehaviour
     Quaternion _initialRotation;
     bool _parameterValue = false, _firstTime = true;
     int _savedStateHash;
-    float _savedNormalizedTime;
+    float _savedNormalizedTime, _life;
 
     private void Start()
     {
@@ -29,7 +30,7 @@ public class GameCamera : MonoBehaviour
         outOfView += WasDetected;
         _fov.ActionsToDo(onView, outOfView);
         _fov.StartSearch();
-
+        _life = _maxLife;
     }
 
     private void OnDetect()
@@ -120,6 +121,17 @@ public class GameCamera : MonoBehaviour
                 Quaternion targetRot = Quaternion.LookRotation(dir);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * _rotationSpeed);
             }
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _life -= damage;
+        Debug.Log("CAMERA LIFE: " + _life);
+
+        if(_life <= 0)
+        {
+            Destroy(_parent);
         }
     }
 }
