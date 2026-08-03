@@ -45,6 +45,7 @@ public class Player : Entity
     public GameObject bulletPrefab;
     public Transform attackPoint;
     public TextMeshProUGUI text;
+    public Shake shake;
     public LayerMask layerMask;
     public float damage, timeBetweenShooting, spread, range, reloadTime, timeBetweenShots;
     public int magazineSize, bulletsPerTap;
@@ -70,7 +71,7 @@ public class Player : Entity
         playerHeight = _playerColl.height;
         shootKey = KeyCode.Mouse0;
         _slide = new Slide(orientation, transform, rigidBody, maxSlideTime, slideForce, slideYScale, transform.localScale.y, slideImpulse, slideParameter);
-        _gun = new Gun(this, mainCamera, attackPoint, text, layerMask, damage, timeBetweenShooting, spread, range, reloadTime, timeBetweenShots, magazineSize, bulletsPerTap, true, Vector3.zero, bulletPrefab);
+        _gun = new Gun(this, mainCamera, attackPoint, text, layerMask, damage, timeBetweenShooting, spread, range, reloadTime, timeBetweenShots, magazineSize, bulletsPerTap, true, Vector3.zero, bulletPrefab, shake);
         _model = new Model(this, rigidBody, transform, orientation, moveImpulse, airMultiplier, jumpCooldown, jumpForce, playerHeight, groundDrag, groundDistance, crouchYScale, crouchImpulse, maxSlopeAngle, slopeDistance, slopeForce, slopeResistance, interactorSource, interactionRange, _slide, _gun);
         _controller = new Controller(_model, sprintKey, jumpKey, crouchKey, interactKey, shootKey, reloadKey, walkSpeed, sprintSpeed, crouchSpeed, slideCooldown, allowButtonHold);
         _model.ModelStart();

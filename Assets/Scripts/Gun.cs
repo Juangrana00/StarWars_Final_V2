@@ -10,6 +10,7 @@ public class Gun
     private Transform _attackPoint;
     private TextMeshProUGUI _text;
     private GameObject _laser;
+    private Shake _shake;
     private LayerMask _layerMask;
     private Vector3 _personalizedDirection;
     private float _damage;
@@ -29,7 +30,7 @@ public class Gun
     private bool _readyToShoot;
     private bool _reloading;
 
-    public Gun(MonoBehaviour monobehaviour, Camera camera, Transform attackPoint, TextMeshProUGUI text, LayerMask layerMask, float damage, float timeBetweenShooting, float spread, float range, float reloadTime, float timeBetweenShots, int magazineSize, int bulletsPerTap, bool usesCamera, Vector3 direction, GameObject laser)
+    public Gun(MonoBehaviour monobehaviour, Camera camera, Transform attackPoint, TextMeshProUGUI text, LayerMask layerMask, float damage, float timeBetweenShooting, float spread, float range, float reloadTime, float timeBetweenShots, int magazineSize, int bulletsPerTap, bool usesCamera, Vector3 direction, GameObject laser, Shake shake)
     {
         _mb = monobehaviour;
         _camera = camera;
@@ -47,6 +48,7 @@ public class Gun
         _usesCamera = usesCamera;
         _personalizedDirection = direction;
         _laser = laser;
+        _shake = shake;
     }
 
     public void GunStart()
@@ -84,11 +86,11 @@ public class Gun
 
         if(_usesCamera)
         {
-            ShootLogic(_attackPoint.transform, _camera.transform.forward);
+            ShootLogic(_attackPoint.transform, _camera.transform.forward, true);
         }
         else
         {
-            ShootLogic(_attackPoint.transform, _personalizedDirection);
+            ShootLogic(_attackPoint.transform, _personalizedDirection, false);
         }
 
         _bulletsLeft--;
@@ -101,7 +103,7 @@ public class Gun
         }
     }
 
-   private void ShootLogic(Transform transform, Vector3 dir)
+   private void ShootLogic(Transform transform, Vector3 dir, bool usesShake)
     {
         float xAxis = Random.Range(-_spread, _spread);
         float yAxis = Random.Range(-_spread, _spread);
@@ -126,6 +128,11 @@ public class Gun
             {
                 damageable.TakeDamage(_damage);
             }
+        }
+
+        if(usesShake)
+        {
+            _shake.StartShake();
         }
     }
 
