@@ -1,10 +1,12 @@
 using System.Collections; // Sumamos esto para poder usar IEnumerator
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : Entity
 {
     [Header("Movement")]
+    public TextMeshProUGUI lifeText;
     public Rigidbody rigidBody;
     public Transform orientation;
     public Camera mainCamera;
@@ -103,6 +105,8 @@ public class Player : Entity
                 materialTermico.SetFloat("_Activo", _visorActivo ? 1f : 0f);
             }
         }
+
+        lifeText.SetText(life.ToString());
     }
 
     private void FixedUpdate()
@@ -113,6 +117,7 @@ public class Player : Entity
     public override void TakeDamage(float damage)
     {
         Debug.Log("WARNING: PLAYER RECEIVED DAMAGE");
+        life -= damage;
 
         if (materialDanio != null)
         {
@@ -122,12 +127,18 @@ public class Player : Entity
             }
             _rutinaDanio = StartCoroutine(EfectoDanioVisual());
         }
+
+        if(life <= 0)
+        {
+            Death();
+        }
     }
 
     public override void Death()
     {
         Debug.Log("GAME OVER: PLAYER DIED");
         if (materialDanio != null) materialDanio.SetFloat("_IntensidadDanio", 1f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private IEnumerator EfectoDanioVisual()
