@@ -17,7 +17,7 @@ public class FieldOfViewEditor : Editor
 
         for (int i = 0; i < fov.segments; i++)
         {
-            float segmentOverSegments = (float) i / fov.segments;
+            float segmentOverSegments = (float)i / fov.segments;
             float plusPiPlusTwo = segmentOverSegments * Mathf.PI * 2;
             Vector3 localVertice = Vector3.forward * radiusDistance + (Mathf.Cos(plusPiPlusTwo) * Vector3.right + Mathf.Sin(plusPiPlusTwo) * Vector3.up) * finalRingRadius;
             ringVertices[i] = origin + orientationRot * localVertice;
@@ -32,7 +32,7 @@ public class FieldOfViewEditor : Editor
         }
 
         Handles.color = Color.white;
-        for (int i = 0; i < fov.segments; i++) 
+        for (int i = 0; i < fov.segments; i++)
         {
             Handles.DrawLine(origin, ringVertices[i]);
         }
