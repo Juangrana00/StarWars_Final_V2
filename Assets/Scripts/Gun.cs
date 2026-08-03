@@ -101,13 +101,14 @@ public class Gun
         }
     }
 
-    private void ShootLogic(Transform transform, Vector3 dir)
+   private void ShootLogic(Transform transform, Vector3 dir)
     {
         float xAxis = Random.Range(-_spread, _spread);
         float yAxis = Random.Range(-_spread, _spread);
         Vector3 direction = dir + new Vector3(xAxis, yAxis, 0);
 
-        var laser = UnityEngine.Object.Instantiate(_laser, transform.position, Quaternion.Euler(90, 0, 0));
+        // ACÁ ESTÁ LA MAGIA: Usamos Quaternion.LookRotation(direction) para que el prefab rote hacia donde viaja
+        var laser = UnityEngine.Object.Instantiate(_laser, transform.position, Quaternion.LookRotation(direction) * Quaternion.Euler(90, 0, 0));
         laser.TryGetComponent(out Rigidbody rb);
         rb.velocity = direction * 50f;
 
